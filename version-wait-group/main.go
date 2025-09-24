@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 
@@ -46,11 +47,17 @@ func main() {
 			defer wg.Done()
 			result := checker.CheckUrl(u)
 			if result.Err != nil {
-				fmt.Printf("KO %v: %v\n", result.Target, result.Err)
+				var unreachable *checker.UnreachableUrlError
+				if errors.As(result.Err, &unreachable) {
+					fmt.Printf("KO %v: %v\n", unreachable.URL, unreachable.Err)
+				} else {
+					fmt.Printf("KO %v: %v\n", result.Target, result.Err)
+				}
 			} else {
 				fmt.Printf("OK %v: %v\n", result.Target, result.Statuts)
 			}
 		}(url)
 	}
+	wg.Wait()
 
 }
