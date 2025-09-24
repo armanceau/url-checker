@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/armanceau/url-checker/internal/checker"
+	"github.com/armanceau/url-checker/version-channel/internal/checker"
 )
 
 func main() {
